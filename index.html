@@ -111,19 +111,6 @@ button {
     font-size: 20px;
     animation: floatUp 4s linear forwards;
 }
-
-/* Unmute button style */
-#unmuteBtn {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 15px;
-    cursor: pointer;
-    border-radius: 10px;
-    border: none;
-    background-color: #ff4d6d;
-    color: white;
-    display: none; /* hidden until needed */
-}
 </style>
 </head>
 
@@ -140,8 +127,7 @@ button {
 <div id="loveText">Я тебя люблю сладкая ❤️</div>
 
 <!-- Audio -->
-<audio id="bgMusic" src="music.mp3" autoplay muted loop></audio>
-<button id="unmuteBtn" onclick="unmuteMusic()">Включить музыку 🔊</button>
+<audio id="bgMusic" src="music.mp3" loop></audio>
 
 <script>
 const yesBtn = document.getElementById("yesBtn");
@@ -151,19 +137,11 @@ const buttons = document.getElementById("buttons");
 const bigHeart = document.getElementById("bigHeart");
 const loveText = document.getElementById("loveText");
 const music = document.getElementById("bgMusic");
-const unmuteBtn = document.getElementById("unmuteBtn");
 
 let scale = 1;
 
-// Function to unmute music
-function unmuteMusic() {
-    music.muted = false;
-    music.play().catch(() => {});
-    unmuteBtn.style.display = "none"; // hide button after click
-}
-
-// Yes button click
 yesBtn.addEventListener("click", () => {
+
     // hide question & buttons
     question.style.display = "none";
     buttons.style.display = "none";
@@ -175,11 +153,8 @@ yesBtn.addEventListener("click", () => {
     // animations
     bigHeart.style.animation = "pop 0.6s ease forwards, heartbeat 1.5s infinite 0.6s";
 
-    // play music, if browser allows
-    music.play().catch(() => {
-        // show unmute button if autoplay blocked
-        unmuteBtn.style.display = "inline-block";
-    });
+    // play music (user clicked, so browser allows sound)
+    music.play();
 
     // optional vibration (Android only)
     if (navigator.vibrate) {
@@ -189,13 +164,11 @@ yesBtn.addEventListener("click", () => {
     startFloatingHearts();
 });
 
-// No button click
 noBtn.addEventListener("click", () => {
     scale += 0.25;
     yesBtn.style.transform = "scale(" + scale + ")";
 });
 
-// Floating hearts
 function startFloatingHearts() {
     setInterval(() => {
         const heart = document.createElement("div");
