@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffe6f0, #ffd6e8);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 2.3rem;
+    color: #c2185b;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+}
+
+#noBtn {
+    background: #888;
+    color: white;
+}
+
+/* HEART */
+#bigHeart {
+    position: relative;
+    width: 220px;
+    height: 200px;
+    background: linear-gradient(145deg, #ff4d6d, #ff1f4b);
+    transform: rotate(-45deg);
+    display: none;
+    box-shadow: 0 10px 30px rgba(255, 0, 80, 0.4);
+}
+
+#bigHeart::before,
+#bigHeart::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 200px;
+    background: linear-gradient(145deg, #ff4d6d, #ff1f4b);
+    border-radius: 50%;
+}
+
+#bigHeart::before {
+    top: -110px;
+    left: 0;
+}
+
+#bigHeart::after {
+    left: 110px;
+    top: 0;
+}
+
+#loveText {
+    display: none;
+    margin-top: 40px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #c2185b;
+}
+
+/* Animations */
+@keyframes pop {
+    0% { transform: rotate(-45deg) scale(0); }
+    100% { transform: rotate(-45deg) scale(1); }
+}
+
+@keyframes heartbeat {
+    0%,100% { transform: rotate(-45deg) scale(1); }
+    50% { transform: rotate(-45deg) scale(1.1); }
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh);
+        opacity: 0;
+    }
+}
+
+.floating-heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 4s linear forwards;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Ты будешь моей Валентинкой?</h1>
+
+<div class="buttons" id="buttons">
+    <button id="yesBtn">Да</button>
+    <button id="noBtn">Нет</button>
+</div>
+
+<div id="bigHeart"></div>
+<div id="loveText">Я тебя люблю сладкая ❤️</div>
+
+<audio id="bgMusic" loop>
+    <source src="YOUR_MP3_LINK_HERE" type="audio/mpeg">
+</audio>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const buttons = document.getElementById("buttons");
+const bigHeart = document.getElementById("bigHeart");
+const loveText = document.getElementById("loveText");
+const music = document.getElementById("bgMusic");
+
+let scale = 1;
+
+yesBtn.addEventListener("click", () => {
+
+    // hide question & buttons
+    question.style.display = "none";
+    buttons.style.display = "none";
+
+    // show heart & text
+    bigHeart.style.display = "block";
+    loveText.style.display = "block";
+
+    // animations
+    bigHeart.style.animation = "pop 0.6s ease forwards, heartbeat 1.5s infinite 0.6s";
+
+    // mobile-safe music start
+    music.play().catch(() => {});
+
+    // optional vibration (Android only)
+    if (navigator.vibrate) {
+        navigator.vibrate(200);
+    }
+
+    startFloatingHearts();
+});
+
+noBtn.addEventListener("click", () => {
+    scale += 0.25;
+    yesBtn.style.transform = "scale(" + scale + ")";
+});
+
+function startFloatingHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.classList.add("floating-heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+    }, 500);
+}
+</script>
+
+</body>
+</html>
